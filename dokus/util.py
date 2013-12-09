@@ -1,3 +1,9 @@
+def warn(text, filename=None, lineno=None):
+    if filename or lineno:
+        text += '[{}:{}]'.format(filename or '<input>', lineno or '?')
+
+    print text
+
 def find_lines(text):
     lines = []
     index = 0

@@ -2,24 +2,16 @@ $COMPARE::VALUES = 0;
 $COMPARE::SCORES = 1;
 $COMPARE::EXTERN = 2;
 
-// this is a comment before a function
-// so is this
-
-function multiLineTest(
-   %foo, %bar,
-   %baz, %quux
-) {
-}
-
 // HeapQueue HeapQueue([string init], [number compareMode], [function compareArg])
-//   desc: Returns a new instance of a HeapQueue.
+//  Instanciates a new HeapQueue.
+//  @return An unnamed, ungrouped HeapQueue object.
 //
-//   arg init:
-//     An initial \n-delimited set of items to ::push onto the queue.
-//     Individual items are in the format of "item value\titem score".
+//  @arg init no multiline yet
+//// - An initial \n-delimited set of items to ::push onto the queue.
+//// - Individual items are in the format of "item value\titem score".
 //
-//   arg compareMode: One of $COMPARE::*, determining how to compare items. $COMPARE::SCORES by default.
-//   arg compareArg: If compareMode is $COMPARE::EXTERN, the function to call for comparing items.
+//  @arg compareMode One of $COMPARE::*, determining how to compare items. $COMPARE::SCORES by default.
+//  @arg compareArg If compareMode is $COMPARE::EXTERN, the function to call for comparing items.
 
 function HeapQueue(%init, %compareMode, %compareArg) {
 	return new ScriptObject() {
@@ -31,8 +23,8 @@ function HeapQueue(%init, %compareMode, %compareArg) {
 	};
 }
 
-// HeapQueue::onAdd
-//   private
+// void HeapQueue::onAdd()
+//  @private
 
 function HeapQueue::onAdd(%this) {
 	%this.size = 0;
@@ -61,11 +53,11 @@ function HeapQueue::onAdd(%this) {
 }
 
 // void HeapQueue::push(item, [number score])
-//   desc: Pushes a new item onto the queue, moving it down to the proper position.
-//   see: HeapQueue::pop
+//  Pushes a new item onto the queue, moving it down to the proper position.
 //
-//   arg item: The value of the item to add (any value).
-//   arg score: A numeric value to sort the item by if compareMode is $COMPARE::SCORES.
+//  @see HeapQueue::pop
+//  @arg item The value of the item to add (any value).
+//  @arg score A numeric value to sort the item by if compareMode is $COMPARE::SCORES.
 
 function HeapQueue::push(%this, %item, %score) {
 	%this.contains[%item] = 1;
@@ -77,10 +69,11 @@ function HeapQueue::push(%this, %item, %score) {
 	%this._demote(0, %this.size - 1);
 }
 
-// * HeapQueue::pop()
-//   desc: Pops (removes) the best item from the queue and finds a successor for the queue.
-//   return: The value of the best item in the queue.
-//   see: HeapQueue::pop
+// any HeapQueue::pop()
+//  Pops (removes) the best item from the queue and finds a successor for the queue.
+//
+//  @return The value of the best item in the queue.
+//  @see HeapQueue::push
 
 function HeapQueue::pop(%this) {
 	if (!%this.size) {
@@ -102,8 +95,8 @@ function HeapQueue::pop(%this) {
 	return %item;
 }
 
-// HeapQueue::_demote
-//   private
+// void HeapQueue::_demote(int start, int index)
+//  @private
 
 function HeapQueue::_demote(%this, %start, %index) {
 	%item = %this.item[%index];
@@ -124,8 +117,8 @@ function HeapQueue::_demote(%this, %start, %index) {
 	%this.item[%index] = %item;
 }
 
-// HeapQueue::_promote
-//   
+// void HeapQueue::_promote(int index)
+//  @private
 
 function HeapQueue::_promote(%this, %index) {
 	%start = %index;
@@ -150,12 +143,12 @@ function HeapQueue::_promote(%this, %index) {
 	%this._demote(%start, %index);
 }
 
-// HeapQueue::compare(a, b)
-//   desc: Used internally to determine which item to prioritize, using the configured comparator.
-//   return: 1 if a is better than b, 0 otherwise.
+// bool HeapQueue::compare(a, b)
+//  Used internally to determine which item to prioritize, using the configured comparator.
 //
-//   arg a: The left child item to compare.
-//   arg b: The right child item to compare.
+//  @return 1 if a is better than b, 0 otherwise.
+//  @arg a The left child item to compare.
+//  @arg b The right child item to compare.
 
 function HeapQueue::compare(%this, %a, %b) {
 	if (%this.compareMode == $COMPARE::VALUES) {
