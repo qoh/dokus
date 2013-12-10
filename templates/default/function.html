@@ -19,29 +19,24 @@
 		{{ func.desc }}
 
 		{% if func.described_args %}
-			<p class="subtle">Arguments:</p>
-			<ul class="subtle">
 			{% for arg in func.args -%}
-				<li>
+				<div class="subtle arg_desc">
 					<tt class="nobg">
 						{% if arg.type %}<em>{{ arg.type }}</em>{% endif %}
 						{{ arg.name }}
 					</tt>
-					{%- if arg.desc %}
-						<p class="subtle indent">{{ arg.desc }}</p>
-					{% endif %}
-				</li>
+					{{ arg.desc }}
+				</div>
 			{%- endfor %}
-			</ul>
 		{% endif %}
 
 		{% if func.see %}
-			<p class="subtle">See also:</p>
-			<ul class="subtle">
-			{% for name in func.see -%}
-				<li><a href="#{{ name }}"><code>{{ name }}</code></a></li>
-			{%- endfor %}
-			</ul>
+			<dl>
+				<dt>See also:</dt>
+				{% for name in func.see -%}
+					<dd><a href="#{{ name }}"><code>{{ name }}</code></a></dd>
+				{%- endfor %}
+			</dl>
 		{% endif %}
 	</dd>
 </dl>

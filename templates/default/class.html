@@ -14,21 +14,16 @@
 	<dd>
 		{{ cls.desc }}
 
-		{% if cls.args %}
-			<p class="subtle">Arguments:</p>
-			<ul class="subtle">
+		{% if cls.described_args %}
 			{% for arg in cls.args -%}
-				<li>
+				<div class="subtle arg_desc">
 					<tt class="nobg">
 						{% if arg.type %}<em>{{ arg.type }}</em>{% endif %}
 						{{ arg.name }}
 					</tt>
-					{%- if arg.desc %}
-						<p class="subtle indent">{{ arg.desc }}</p>
-					{% endif %}
-				</li>
+					{{ arg.desc }}
+				</div>
 			{%- endfor %}
-			</ul>
 		{% endif %}
 
 		{% if cls.see %}

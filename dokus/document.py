@@ -10,10 +10,13 @@ def document_function(declare, filename=None):
 	function.line = declare['lineno']
 
 	in_desc = False
+	base_indent = None
+
 	descriptions = []
 
 	for comment, lineno in declare['comments']:
-		comment = comment.strip()
+		original = comment
+		comment = comment.lstrip()
 
 		if comment.startswith('//'):
 			continue
@@ -26,15 +29,21 @@ def document_function(declare, filename=None):
 					function.args = header['args']
 
 				function.type = header['return_type']
-			
+
 			continue
 
 		if not comment.startswith('@'):
+			if base_indent == None:
+				base_indent = original[:len(original) - len(comment)]
+
+			if original.startswith(base_indent):
+				original = original[len(base_indent):]
+
 			if in_desc:
-				descriptions[-1] += '\n' + comment
+				descriptions[-1] += '\n' + original
 			else:
 				in_desc = True
-				descriptions.append(comment)
+				descriptions.append(original)
 
 			continue
 
@@ -152,9 +161,12 @@ def _interpret_prefixed(text, function, declare, filename=None, lineno=None):
 
 		for argument in function.args:
 			if argument['name'] == split[0]:
-				argument['desc'] = split[1]
-				function.described_args = True
+				if (hasattr(argument, 'name')):
+					argument['desc'] += split[1]
+				else:
+					argument['desc'] = split[1]
 
+				function.described_args = True
 				break
 		else:
 			warn('Unknown argument for @arg function comment', filename=filename, lineno=lineno)

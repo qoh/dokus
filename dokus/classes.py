@@ -29,16 +29,24 @@ class TSFunction(object):
         self.scopename = split[0] if len(split) == 2 else ''
 
     def format(self):
-        keys = (
-            'name', 'args', 'type', 'args',
+        keys = ('name', 'basename', 'scopename', 'type',
             'private', 'deprecated', 'in_class', 'described_args',
-            'code', 'line', 'see', 'basename', 'scopename'
+            'code', 'line', 'see'
         )
 
-        data = {'desc': markdown.markdown(self.desc.decode('utf8'))}
+        data = {
+            'desc': markdown.markdown(self.desc.decode('utf8')),
+            'args': []
+        }
 
         for key in keys:
             data[key] = getattr(self, key)
+
+        for arg in self.args:
+            if hasattr(arg, 'desc'):
+                arg['desc'] = markdown.markdown(arg['desc'].decode('utf8'))
+
+            data['args'].append(arg)
 
         return data
 
@@ -69,18 +77,24 @@ class TSClass(object):
         self.methods.append(function)
 
     def format(self):
-        keys = (
-            'name', 'args', 'private', 'deprecated',
-            'code', 'line', 'see', 'described_args'
+        keys = ('name', 'private', 'deprecated', 'described_args',
+            'code', 'line', 'see'
         )
 
         data = {
             'methods': [v.format() for v in self.methods],
-            'desc': markdown.markdown(self.desc.decode('utf8'))
+            'desc': markdown.markdown(self.desc.decode('utf8')),
+            'args': []
         }
 
         for key in keys:
             data[key] = getattr(self, key)
+
+        for arg in self.args:
+            if 'desc' in arg:
+                arg['desc'] = markdown.markdown(arg['desc'].decode('utf8'))
+
+            data['args'].append(arg)
 
         return data
 
