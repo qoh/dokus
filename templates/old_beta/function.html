@@ -1,0 +1,35 @@
+<a name="{{ func.name }}"></a>
+
+<section>
+	<code class="definition">
+		{% if func.private %}<em class="warning">private </em>{% endif %}
+		{% if func.deprecated %}<em class="warning">deprecated </em>{% endif %}
+		{% if func.return_type %}<em class="type">{{ func.return_type }}</em>{% endif %}
+
+		{{ func.name }}(
+			{%- for arg in func.args %}<div class="argument">
+				<em class="type">{{ arg.type }}</em>
+				<span class="identifier">{{ arg.name }}</span>
+				{% if arg.desc %}&mdash; {{ arg.desc }}{% endif %}
+			</div>{% endfor -%}
+		)
+	</code>
+
+	{% if func.desc %}<p>{{ func.desc }}</p>{% endif %}
+
+	<dl>
+		{% if func.return_desc %}<dt>Returns:</dt>
+		<dd>{{ func.return_desc }}</dd>{% endif %}
+
+		{% if func.see %}<dt>See also:</dt>{% endif %}
+
+		{% for name in func.see -%}
+			<dd><a href="#{{ name }}"><code>{{ name }}</code></a></dd>
+		{%- endfor %}
+	</dl>
+
+	{% if func.code %}<!--<code>
+		{% if func.line %}<span class="lineno">{{ func.line }}</span>{% endif %}
+		{{ func.code }}
+	</code>-->{% endif %}
+</section>

@@ -1,0 +1,30 @@
+<a name="class_{{ class.name }}"></a>
+
+<section>
+	<code class="definition">
+		{% if class.private %}<span class="warning">private</span>{% endif %}
+		{% if class.deprecated %}<span class="warning">deprecated</span>{% endif %}
+		<span class="type">class</span>
+
+		{{ class.name }}(
+			{%- for arg in class.args %}<div class="argument">
+				<span class="type">{{ arg.type }}</span>
+				<span class="identifier">{{ arg.name }}</span>
+				{% if arg.desc %}&mdash; {{ arg.desc }}{% endif %}
+			</div>{% endfor -%}
+		)
+	</code>
+
+	{% if class.desc %}<p>{{ class.desc }}</p>{% endif %}
+
+	<dl>
+		{% if class.return_desc %}<dt>Returns:</dt>
+		<dd>{{ class.return_desc }}</dd>{% endif %}
+
+		{% if class.see %}<dt>See also:</dt>{% endif %}
+
+		{% for name in class.see -%}
+			<dd><a href="#{{ name }}"><code>{{ name }}</code></a></dd>
+		{%- endfor %}
+	</dl>
+</section>

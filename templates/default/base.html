@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<script>
+			document.title = "";
+		</script>
+
+		<style>
+			body {
+				font-family: sans-serif;
+				color: #333;
+
+				padding: 1em;
+				padding-top: 0;
+
+				max-width: 60em;
+			}
+
+			p, dd, li {
+				text-align: justify;
+				line-height: 130%;
+			}
+
+			dl {
+				margin-bottom: 15px;
+			}
+
+			dt:target, .highlight {
+				background-color: #fbe54e;
+			}
+
+			*:target>tt, *:target>pre, *:target>code,
+			.highlight>tt, .highlight>pre, .highlight>code {
+				background-color: transparent;
+			}
+
+			dd {
+				margin-top: 3px;
+				margin-bottom: 10px;
+				margin-left: 30px;
+			}
+
+			dd p {
+				margin-top: 0;
+			}
+
+			tt, pre, code {
+				background-color: #ecf0f3;
+				padding: 0 1px 0 1px;
+				font-size: 0.95em;
+			}
+
+			tt.nobg, tt.descscopename {
+				background-color: transparent;
+			}
+
+			tt.descname {
+				background-color: transparent;
+				font-weight: bold;
+				font-size: 1.2em;
+			}
+
+			a {
+				color: #355f7c;
+				text-decoration: none;
+			}
+
+			a.headerlink {
+				color: #c60f0f;
+				font-size: 0.8em;
+				padding: 0 4px 0 4px;
+				visibility: hidden;
+			}
+
+			a.headerlink:hover {
+				background-color: #c60f0f;
+				color: white;
+			}
+
+			*:hover > a.headerlink {
+				visibility: visible;
+			}
+
+			ul.subtle {
+				list-style-type: none;
+				margin-top: 0;
+				margin-bottom: 8px;
+			}
+
+			ul.subtle>li {
+				list-style-type: none;
+			}
+
+			p.subtle {
+				margin-bottom: 4px;
+			}
+
+			p.indent {
+				margin-left: 1em;
+			}
+		</style>
+	</head>
+	<body>
+		{% for cls in classes %}{% include 'new/class.html' %}{% endfor %}
+		{% for func in functions %}{% include 'new/function.html' %}{% endfor %}
+	</body>
+</html>

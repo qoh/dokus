@@ -1,0 +1,47 @@
+<dl class="class">
+	<dt id="class_{{ cls.name }}">
+		<tt>class</tt>
+		<tt class="descname">{{ cls.name }}</tt><big>(</big>
+		{%- for arg in cls.args -%}
+			{%- if arg.optional %}[{% endif -%}
+			{%- if not loop.first %}, {% endif -%}
+			<em>{{ arg.name }}</em>
+			{%- if arg.optional %}]{% endif -%}
+		{%- endfor -%}
+		<big>)</big>
+		<a class="headerlink" href="#class_{{ cls.name }}" title="Permalink to this definition">&para;</a>
+	</dt>
+	<dd>
+		{{ cls.desc }}
+
+		{% if cls.args %}
+			<p class="subtle">Arguments:</p>
+			<ul class="subtle">
+			{% for arg in cls.args -%}
+				<li>
+					<tt class="nobg">
+						{% if arg.type %}<em>{{ arg.type }}</em>{% endif %}
+						{{ arg.name }}
+					</tt>
+					{%- if arg.desc %}
+						<p class="subtle indent">{{ arg.desc }}</p>
+					{% endif %}
+				</li>
+			{%- endfor %}
+			</ul>
+		{% endif %}
+
+		{% if cls.see %}
+			<p class="subtle">See also:</p>
+			<ul class="subtle">
+			{% for name in cls.see -%}
+				<li><a href="#{{ name }}"><code>{{ name }}</code></a></li>
+			{%- endfor %}
+			</ul>
+		{% endif %}
+
+		{% for func in cls.methods %}
+		{% include 'new/function.html' %}
+		{% endfor %}
+	</dd>
+</dl>

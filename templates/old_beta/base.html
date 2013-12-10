@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<style>
+			html, body {
+				margin: 0;
+				padding: 0;
+
+				color: #333;
+				background: #888;
+
+				font-family: helvetica, arial, sans-serif;
+			}
+
+			main {
+				display: flex;
+				flex-wrap: wrap-reverse;
+				justify-content: center;
+				align-items: flex-end;
+			}
+
+			article, aside, section {
+				margin: 1em;
+				padding: 1em 1.5em;
+				border-radius: 3px;
+			}
+
+			article, aside {
+				background: #EEE;
+			}
+
+			article {
+				flex: 3;
+				min-width: 35em;
+			}
+
+			aside {
+				flex: 1;
+				min-width: 15em;
+			}
+
+			aside ul {
+				list-style-type: none;
+				padding-left: 1em;
+			}
+
+			section {
+				background: rgba(147, 128, 108, .051);
+			}
+
+			a:link {
+				color: #55F;
+				text-decoration: none;
+			}
+
+			.volatile_toggle {
+				margin: 1em;
+
+				font-weight: bold;
+				color: #A00;
+			}
+
+			.definition {
+				font-size: 1.25em;
+			}
+
+			.argument {
+				margin-left: 2em;
+			}
+
+			.lineno {
+				display: inline-block;
+				text-align: right;
+				padding: 0.1em;
+				margin-right: 1em;
+				background: #CCC;
+				width: 2em;
+			}
+
+			.type {
+				color: #A08;
+			}
+
+			.identifier {
+				color: #008;
+			}
+
+			.warning {
+				color: #A00;
+				font-weight: bold;
+			}
+
+			@media (max-width: 770px) {
+				article, aside {
+					margin: 0;
+					margin-bottom: 1em;
+
+					padding: 1em 1.5em;
+					border-radius: 0;
+				}
+
+				article {
+					flex: 3;
+					min-width: 100%;
+				}
+
+				aside {
+					flex: 1;
+					min-width: 100%;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<article>
+				{% for class in classes %}{% include 'default/class.html' %}{% endfor %}
+				{% for func in functions %}{% include 'default/function.html' %}{% endfor %}
+
+				{% if functions_volatile %}<a href="#" class="volatile_toggle" style="display:none;" data-scope="module">
+					Hide volatile functions
+				</a>
+
+				<div class="volatile_content" data-scope="module">
+					{% for func in functions_volatile %}{% include 'default/function.html' %}{% endfor %}
+				</div>{% endif %}
+			</article>
+
+			<aside>
+				<ul>
+				{% for class in classes %}{% include 'default/class.html' %}{% endfor %}
+				{% for func in functions %}
+					<li>
+					{% if func.return_type %}<em class="type">{{ func.return_type }}</em>{% endif %}
+					{{ func.name }}
+					</li>
+				{% endfor %}
+				</ul>
+			</aside>
+
+			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+			<script>
+				$(document).ready(function () {
+					$('.volatile_content').hide();
+					var toggles = $('.volatile_toggle')
+
+					toggles.show();
+					toggles.text('Show volatile functions');
+
+					toggles.click(function (event) {
+						var self = $(this);
+						var content = $('.volatile_content[data-scope=' + self.data('scope') + ']');
+
+						self.text((content.is(':visible') ? 'Show' : 'Hide') + ' volatile functions');
+						content.slideToggle();
+
+						event.preventDefault();
+					});
+				});
+			</script>
+		</main>
+	</body>
+</html>

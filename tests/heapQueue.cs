@@ -3,8 +3,10 @@ $COMPARE::SCORES = 1;
 $COMPARE::EXTERN = 2;
 
 // HeapQueue HeapQueue([string init], [number compareMode], [function compareArg])
-//  Instanciates a new HeapQueue.
-//  @return An unnamed, ungrouped HeapQueue object.
+//  Heaps are binary trees for which every parent node has a value less than or equal to any of its children.
+//  This implementation uses arrays for which `heap[k] <= heap[2*k+1]` and `heap[k] <= heap[2*k+2]` for all k, counting elements from zero.
+//  For the sake of comparison, non-existing elements are considered to be infinite.
+//  The interesting property of a heap is that its smallest element is always the root, heap[0].
 //
 //  @arg init no multiline yet
 //// - An initial \n-delimited set of items to ::push onto the queue.
@@ -70,9 +72,7 @@ function HeapQueue::push(%this, %item, %score) {
 }
 
 // any HeapQueue::pop()
-//  Pops (removes) the best item from the queue and finds a successor for the queue.
-//
-//  @return The value of the best item in the queue.
+//  Returns and removes the best item from the queue, and finds a successor for the queue.
 //  @see HeapQueue::push
 
 function HeapQueue::pop(%this) {
@@ -145,8 +145,8 @@ function HeapQueue::_promote(%this, %index) {
 
 // bool HeapQueue::compare(a, b)
 //  Used internally to determine which item to prioritize, using the configured comparator.
+//  Returns 1 if a is better than b, 0 otherwise.
 //
-//  @return 1 if a is better than b, 0 otherwise.
 //  @arg a The left child item to compare.
 //  @arg b The right child item to compare.
 

@@ -1,11 +1,11 @@
-from dokus.function import Function
+from dokus.classes import TSFunction, TSClass
 from dokus.util import warn, verify_identifier
 
 def document_function(declare, filename=None):
 	header = None
 	args = [{'name': v, 'type': '*'} for v in declare['args']]
 
-	function = Function(declare['name'], args)
+	function = TSFunction(declare['name'], args)
 	function.code = declare['code']
 	function.line = declare['lineno']
 
@@ -15,7 +15,7 @@ def document_function(declare, filename=None):
 	for comment, lineno in declare['comments']:
 		comment = comment.strip()
 
-		if comment.startswith('//') or not comment:
+		if comment.startswith('//'):
 			continue
 
 		if not header:
@@ -25,7 +25,7 @@ def document_function(declare, filename=None):
 				if header['args'] != None:
 					function.args = header['args']
 
-				function.return_type = header['return_type']
+				function.type = header['return_type']
 			
 			continue
 
@@ -37,8 +37,11 @@ def document_function(declare, filename=None):
 				descriptions.append(comment)
 
 			continue
-		else:
-			in_desc = False
+
+		in_desc = False
+
+		if not comment:
+			continue
 
 		_interpret_prefixed(comment[1:], function, declare, filename=filename, lineno=lineno)
 
@@ -46,6 +49,29 @@ def document_function(declare, filename=None):
 		function.desc = '\n\n'.join(descriptions)
 
 	return function
+
+def extract_classes(functions):
+	classes = []
+
+	for function in functions[:]:
+		if function.name == function.type and '::' not in function.name:
+			classes.append(TSClass.from_constructor(function))
+			functions.remove(function)
+
+	for function in functions[:]:
+		split = function.name.split('::')
+
+		if len(split) != 2:
+			continue
+
+		for cls in classes:
+			if split[0] == cls.name:
+				cls.add_method(function)
+				functions.remove(function)
+
+				break
+
+	return classes, functions
 
 def _parse_header(text, name):
 	pos = text.find('(')
@@ -116,15 +142,8 @@ def _parse_args(text):
 def _interpret_prefixed(text, function, declare, filename=None, lineno=None):
 	split = text.split(' ', 1)
 	invalid = 'Missing content for @{} function comment'.format(split[0])
-	
-	if split[0] == 'return':
-		if len(split) < 2:
-			warn(invalid, filename=filename, lineno=lineno)
-			return
 
-		function.return_desc = split[1]
-
-	elif split[0] == 'arg':
+	if split[0] == 'arg':
 		split = split[1].split(' ', 1)
 
 		if len(split) < 2:

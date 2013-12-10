@@ -1,0 +1,48 @@
+{% if volatile or not (func.private or func.deprecated) %}
+<dl class="function">
+	<dt id="{{ func.name }}">
+		{% if func.scopename and not func.in_class -%}
+			<tt class="descscopename">{{ func.scopename }}.</tt>
+		{%- endif -%}
+		<tt class="descname">{{ func.basename }}</tt><big>(</big>
+		{%- for arg in func.args -%}
+			{%- if arg.optional %}[{% endif -%}
+			{%- if not loop.first %}, {% endif -%}
+			<em>{{ arg.name }}</em>
+			{%- if arg.optional %}]{% endif -%}
+		{%- endfor -%}
+		<big>)</big>
+		{% if func.type %}<tt>&#x21d2; {{ func.type }}</tt>{% endif %}
+		<a class="headerlink" href="#{{ func.name }}" title="Permalink to this definition">&para;</a>
+	</dt>
+	<dd>
+		{{ func.desc }}
+
+		{% if func.args %}
+			<p class="subtle">Arguments:</p>
+			<ul class="subtle">
+			{% for arg in func.args -%}
+				<li>
+					<tt class="nobg">
+						{% if arg.type %}<em>{{ arg.type }}</em>{% endif %}
+						{{ arg.name }}
+					</tt>
+					{%- if arg.desc %}
+						<p class="subtle indent">{{ arg.desc }}</p>
+					{% endif %}
+				</li>
+			{%- endfor %}
+			</ul>
+		{% endif %}
+
+		{% if func.see %}
+			<p class="subtle">See also:</p>
+			<ul class="subtle">
+			{% for name in func.see -%}
+				<li><a href="#{{ name }}"><code>{{ name }}</code></a></li>
+			{%- endfor %}
+			</ul>
+		{% endif %}
+	</dd>
+</dl>
+{% endif %}
