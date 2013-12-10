@@ -1,4 +1,7 @@
-import markdown
+try:
+    from markdown import markdown
+except ImportError:
+    markdown = lambda v: v
 
 class TSFunction(object):
     def __init__(self, name, args):
@@ -38,7 +41,7 @@ class TSFunction(object):
         )
 
         data = {
-            'desc': markdown.markdown(self.desc.decode('utf8')),
+            'desc': markdown(self.desc.decode('utf8')),
             'args': []
         }
 
@@ -47,7 +50,7 @@ class TSFunction(object):
 
         for arg in self.args:
             if hasattr(arg, 'desc'):
-                arg['desc'] = markdown.markdown(arg['desc'].decode('utf8'))
+                arg['desc'] = markdown(arg['desc'].decode('utf8'))
 
             data['args'].append(arg)
 
@@ -97,12 +100,12 @@ class TSClass(object):
 
         for arg in self.args:
             if 'desc' in arg:
-                arg['desc'] = markdown.markdown(arg['desc'].decode('utf8'))
+                arg['desc'] = markdown(arg['desc'].decode('utf8'))
 
             data['args'].append(arg)
 
         for field in self.fields:
-            field['desc'] = markdown.markdown(field['desc'].decode('utf8'))
+            field['desc'] = markdown(field['desc'].decode('utf8'))
             data['fields'].append(field)
 
         return data
