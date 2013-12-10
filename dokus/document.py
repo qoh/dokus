@@ -3,7 +3,7 @@ from dokus.util import warn, verify_identifier
 
 def document_function(declare, filename=None):
 	header = None
-	args = [{'name': v, 'type': '*'} for v in declare['args']]
+	args = [{'name': v, 'type': ''} for v in declare['args']]
 
 	function = TSFunction(declare['name'], args)
 	function.code = declare['code']
@@ -85,13 +85,13 @@ def _parse_header(text, name):
 
 	split = head.split()
 
-	if len(split) > 2 or split[-1] != name:
+	if not split or len(split) > 2 or split[-1] != name:
 		return
 
 	if len(split) == 2 and split[0] != '':
 		return_type = split[0]
 	else:
-		return_type = 'any'
+		return_type = ''
 
 	args = None
 
@@ -126,7 +126,7 @@ def _parse_args(text):
 			return
 
 		item_name = split_item[-1]
-		item_type = split_item[0] if len(split_item) == 2 else 'any'
+		item_type = split_item[0] if len(split_item) == 2 else ''
 
 		if not verify_identifier(item_name):
 			return
@@ -153,6 +153,8 @@ def _interpret_prefixed(text, function, declare, filename=None, lineno=None):
 		for argument in function.args:
 			if argument['name'] == split[0]:
 				argument['desc'] = split[1]
+				function.described_args = True
+
 				break
 		else:
 			warn('Unknown argument for @arg function comment', filename=filename, lineno=lineno)
