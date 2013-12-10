@@ -11,7 +11,7 @@ def test(filename):
         text = fp.read()
 
     functions = [document_function(x, basename) for x in get_declares(text, basename)]
-    rendered = render(functions, template='new').encode('utf8')
+    rendered = render(functions).encode('utf8')
 
     with open(filename + '.html', 'w') as fp:
         fp.write(rendered)

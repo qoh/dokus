@@ -2,6 +2,13 @@ $COMPARE::VALUES = 0;
 $COMPARE::SCORES = 1;
 $COMPARE::EXTERN = 2;
 
+// string foo
+//  This is a test of non-class functions.
+
+function foo() {
+	//
+}
+
 // HeapQueue HeapQueue([string init], [number compareMode], [function compareArg])
 //  Heaps are binary trees for which every parent node has a value less than or equal to any of its children.
 //  This implementation uses arrays for which `heap[k] <= heap[2*k+1]` and `heap[k] <= heap[2*k+2]` for all k, counting elements from zero.

@@ -48,7 +48,6 @@ def render(functions, template=None):
             if template == None:
                 template = 'default'
 
-            #template = env.get_template(os.path.join(template, 'base.html'))
             template = env.get_template(template + '/base.html')
 
     classes, functions = extract_classes(functions)
