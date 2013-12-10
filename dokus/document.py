@@ -161,8 +161,8 @@ def _interpret_prefixed(text, function, declare, filename=None, lineno=None):
 
 		for argument in function.args:
 			if argument['name'] == split[0]:
-				if (hasattr(argument, 'name')):
-					argument['desc'] += split[1]
+				if 'desc' in argument and argument['desc']:
+					argument['desc'] += '\n' + split[1]
 				else:
 					argument['desc'] = split[1]
 
@@ -171,6 +171,20 @@ def _interpret_prefixed(text, function, declare, filename=None, lineno=None):
 		else:
 			warn('Unknown argument for @arg function comment', filename=filename, lineno=lineno)
 
+	elif split[0] == 'field':
+		split = split[1].split(' ', 1)
+
+		if len(split) < 2:
+			warn(invalid, filename=filename, lineno=lineno)
+			return
+
+		for field in function.fields:
+			if field['name'] == split[0]:
+				field['desc'] += '\n' + split[1]
+				break
+		else:
+			function.fields.append({'name': split[0], 'desc': split[1]})
+
 	elif split[0] == 'see':
 		if len(split) < 2:
 			warn(invalid, filename=filename, lineno=lineno)
@@ -178,6 +192,8 @@ def _interpret_prefixed(text, function, declare, filename=None, lineno=None):
 
 		function.see.append(split[1])
 
+	elif split[0] == 'abstract':
+		function.abstract = True
 	elif split[0] == 'private':
 		function.private = True
 	elif split[0] == 'deprecated':

@@ -1,14 +1,14 @@
 <dl class="class">
 	<dt id="class_{{ cls.name }}">
-		<tt>class</tt>
-		<tt class="descname">{{ cls.name }}</tt><big>(</big>
+		<tt class="nobg">{% if cls.abstract %}abstract {%endif %}class</tt>
+		<tt class="descname">{{ cls.name }}</tt>{% if cls.args %}<big>(</big>{% endif %}
 		{%- for arg in cls.args -%}
 			{%- if arg.optional %}[{% endif -%}
 			{%- if not loop.first %}, {% endif -%}
 			<em>{{ arg.name }}</em>
 			{%- if arg.optional %}]{% endif -%}
 		{%- endfor -%}
-		<big>)</big>
+		{% if cls.args %}<big>)</big>{% endif %}
 		<a class="headerlink" href="#class_{{ cls.name }}" title="Permalink to this definition">&para;</a>
 	</dt>
 	<dd>

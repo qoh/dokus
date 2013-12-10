@@ -6,6 +6,8 @@ class TSFunction(object):
         self.args = args
         self.type = ''
         self.desc = ''
+
+        self.fields = []
         self.see = []
 
         self.set_name_parts()
@@ -13,6 +15,7 @@ class TSFunction(object):
         self.private = self.infer_private()
         self.deprecated = False
         self.in_class = False
+        self.abstract = False
         self.described_args = False
 
         self.code = None
@@ -55,10 +58,13 @@ class TSClass(object):
         self.name = name
         self.args = args
         self.desc = ''
+
+        self.fields = []
         self.see = []
 
         self.private = self.infer_private()
         self.deprecated = False
+        self.abstract = False
         self.described_args = False
 
         self.code = None
@@ -77,14 +83,13 @@ class TSClass(object):
         self.methods.append(function)
 
     def format(self):
-        keys = ('name', 'private', 'deprecated', 'described_args',
-            'code', 'line', 'see'
-        )
+        keys = ('name', 'private', 'deprecated', 'described_args', 'code', 'line', 'see', 'abstract')
 
         data = {
             'methods': [v.format() for v in self.methods],
             'desc': markdown.markdown(self.desc.decode('utf8')),
-            'args': []
+            'args': [],
+            'fields': []
         }
 
         for key in keys:
@@ -96,12 +101,16 @@ class TSClass(object):
 
             data['args'].append(arg)
 
+        for field in self.fields:
+            field['desc'] = markdown.markdown(field['desc'].decode('utf8'))
+            data['fields'].append(field)
+
         return data
 
     @classmethod
     def from_constructor(cls, function):
         ins = cls(function.name, function.args)
-        keys = ('desc', 'see', 'private', 'deprecated', 'described_args', 'code', 'line')
+        keys = ('desc', 'see', 'private', 'deprecated', 'described_args', 'code', 'line', 'abstract', 'fields')
 
         for key in keys:
             setattr(ins, key, getattr(function, key))
