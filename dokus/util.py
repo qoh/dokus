@@ -23,7 +23,7 @@ def verify_identifier(text, allow_scope=False):
         return False
 
     normal = '_abcdefghijklmnopqrstuvwxyz'
-    digits = '012345678'
+    digits = '0123456789'
 
     for scope in split:
         if not scope:

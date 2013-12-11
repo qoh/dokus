@@ -29,6 +29,7 @@ def document_function(declare, filename=None):
 					function.args = header['args']
 
 				function.type = header['return_type']
+				function.mult = header['mult']
 
 			continue
 
@@ -103,27 +104,34 @@ def _parse_header(text, name):
 		return_type = ''
 
 	args = None
+	mult = False
 
 	if text != '':
 		if text[-1] != ')':
 			return
 
-		args = _parse_args(text[:-1])
+		args, mult = _parse_args(text[:-1])
 
 		if args == None:
 			return
 
-	return {'return_type': return_type, 'args': args}
+	return {'return_type': return_type, 'args': args, 'mult': mult}
 
 def _parse_args(text):
 	if not text.split():
-		return []
+		return [], False
 
 	split = map(lambda v: v.strip(), text.split(','))
+
 	args = []
+	mult = False
 
 	for item in split:
 		optional = False
+
+		if item == '...':
+			mult = True
+			continue
 
 		if len(item) > 2 and item[0] == '[' and item[-1] == ']':
 			optional = True
@@ -132,13 +140,13 @@ def _parse_args(text):
 		split_item = item.split()
 
 		if len(split_item) > 2:
-			return
+			return None, False
 
 		item_name = split_item[-1]
 		item_type = split_item[0] if len(split_item) == 2 else ''
 
 		if not verify_identifier(item_name):
-			return
+			return None, False
 
 		args.append({
 			'name': item_name,
@@ -146,7 +154,7 @@ def _parse_args(text):
 			'optional': optional
 		})
 
-	return args
+	return args, mult
 
 def _interpret_prefixed(text, function, declare, filename=None, lineno=None):
 	split = text.split(' ', 1)

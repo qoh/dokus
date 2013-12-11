@@ -11,6 +11,7 @@
 			<em>{{ arg.name }}</em>
 			{%- if arg.optional %}]{% endif -%}
 		{%- endfor -%}
+		{%- if func.mult %}, <em>...</em>{% endif -%}
 		<big>)</big>
 		{% if func.type %}<tt class="nobg">&#x21d2; {{ func.type }}</tt>{% endif %}
 		<a class="headerlink" href="#{{ func.name }}" title="Permalink to this definition">&para;</a>

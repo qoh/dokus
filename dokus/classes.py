@@ -18,6 +18,8 @@ class TSFunction(object):
         self.private = self.infer_private()
         self.deprecated = False
         self.in_class = False
+
+        self.mult = False
         self.abstract = False
         self.described_args = False
 
@@ -35,7 +37,7 @@ class TSFunction(object):
         self.scopename = split[0] if len(split) == 2 else ''
 
     def format(self):
-        keys = ('name', 'basename', 'scopename', 'type',
+        keys = ('name', 'basename', 'scopename', 'type', 'mult',
             'private', 'deprecated', 'in_class', 'described_args',
             'code', 'line', 'see'
         )
