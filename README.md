@@ -6,7 +6,7 @@ Dokus is a Python utility and package for generating HTML documentation or extra
 Dependencies
 ------------
 
-Whereas the core of Dokus has no external dependencies, some isolated components have optional dependency.
+Whereas the core of Dokus has no external dependencies, some isolated components have optional dependencies.
 
  * `dokus.render` requires the `jinja2` package to use the default templates, and will use the `markdown` package if found.
 
