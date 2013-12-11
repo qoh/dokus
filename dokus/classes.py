@@ -26,7 +26,7 @@ class TSFunction(object):
 
     def infer_private(self):
         auto = ('onadd', 'onremove')
-        return self.name.startswith('_') or self.basename.lower() in auto
+        return self.basename.startswith('_') or self.basename.lower() in auto
 
     def set_name_parts(self):
         split = self.name.split('::')
