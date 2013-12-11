@@ -90,7 +90,7 @@ class TSClass(object):
 
         data = {
             'methods': [v.format() for v in self.methods],
-            'desc': markdown.markdown(self.desc.decode('utf8')),
+            'desc': markdown(self.desc.decode('utf8')),
             'args': [],
             'fields': []
         }
